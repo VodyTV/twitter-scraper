@@ -11,7 +11,7 @@ def get_tweets(query, pages=25):
     #url = f'https://twitter.com/i/profiles/show/{user}/timeline/tweets?include_available_features=1&include_entities=1&include_new_items_bar=true'
     headers = {
         'Accept': 'application/json, text/javascript, */*; q=0.01',
-        'Referer': f'https://twitter.com/search?q=jumanji&src=typd
+        'Referer': f'https://twitter.com/search?q=jumanji&src=typd',
         #'Referer': f'https://twitter.com/{user}',
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.8',
         'X-Twitter-Active-User': 'yes',
