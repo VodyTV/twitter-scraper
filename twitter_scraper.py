@@ -45,7 +45,7 @@ def get_tweets(query, pages=25):
                                0].replace(comma, "").replace(dot,""))
                 likes = int(interactions[2].split(" ")[0].replace(comma, "").replace(dot,""))
                 hashtags = [hashtag_node.full_text for hashtag_node in tweet.find('.twitter-hashtag')]
-                urls = [url_node.attrs['data-expanded-url'] for url_node in tweet.find('a.twitter-timeline-link:not(.u-hidden)')]
+                urls = [url_node.attrs['data-expanded-url'] if 'data-expanded-url' in url_node.attrs.keys() for url_node in tweet.find('a.twitter-timeline-link:not(.u-hidden)')]
                 photos = [photo_node.attrs['data-image-url'] for photo_node in tweet.find('.AdaptiveMedia-photoContainer')]
                 
                 videos = []
