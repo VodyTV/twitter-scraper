@@ -9,8 +9,10 @@ def get_tweets(query_raw, pages=25):
 
     """Gets tweets for a given user, via the Twitter frontend API."""
 
-    # Massage query into the right form and prepend hashtag
-    query = '%23'+''.join(e for e in query_raw.lower() if e.isalnum())
+    if type(query_raw)==list:
+        query = '%20%2B%20'.join(['%23'+''.join(e for e in word.lower() if e.isalnum()) for word in query_raw])
+    else:
+        query = '%23'+''.join(e for e in query_raw.lower() if e.isalnum())
 
     url =  f"https://twitter.com/i/search/timeline?vertical=default&q={query}&src=typd&include_available_features=1&include_entities=1&&reset_error_state=false"
 
