@@ -71,7 +71,7 @@ def get_tweets(query_raw, pages=25):
                                'replies': replies, 'retweets': retweets, 'likes': likes, 
                                 'hashtags': hashtags, 'urls': urls,
                                 'photos': photos, 'videos': videos,
-                                'search-text': query
+                                'search_text': query
                                })
 
             last_tweet = html.find('.stream-item')[-1].attrs['data-item-id']
