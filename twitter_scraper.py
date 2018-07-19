@@ -19,14 +19,7 @@ def get_tweets(query_raw, pages=25):
     # Url for users should we want to reinclude it
     #url = f'https://twitter.com/i/profiles/show/{user}/timeline/tweets?include_available_features=1&include_entities=1&include_new_items_bar=true'
 
-    headers = {
-        'Accept': 'application/json, text/javascript, */*; q=0.01',
-        'Referer': f'https://twitter.com/search?q={query}&src=typd',
-        #'Referer': f'https://twitter.com/{user}',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.8',
-        'X-Twitter-Active-User': 'yes',
-        'X-Requested-With': 'XMLHttpRequest'
-    }
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:62.0) Gecko/20100101 Firefox/62.0'}
 
     def gen_tweets(pages):
         r = session.get(url, headers=headers)
@@ -73,6 +66,7 @@ def get_tweets(query_raw, pages=25):
                                 'photos': photos, 'videos': videos
                                })
 
+            first_tweet = html.find('.stream-item')[0].attrs['data-item-id']
             last_tweet = html.find('.stream-item')[-1].attrs['data-item-id']
 
             for tweet in tweets:
@@ -80,8 +74,11 @@ def get_tweets(query_raw, pages=25):
                     tweet['text'] = re.sub('http', ' http', tweet['text'], 1)
                     yield tweet
 
+            newrl = url + '&max_position=TWEET-'+last_tweet+'-'+first_tweet
+               
             r = session.get(
-                url, params = {'max_position': last_tweet}, headers = headers)
+                newrl, headers = headers)
+            
             pages += -1
 
     yield from gen_tweets(pages)
