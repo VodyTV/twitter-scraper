@@ -28,9 +28,8 @@ def get_tweets(query_raw, pages=25):
             try:
                 html = HTML(html=r.json()['items_html'],
                             url='bunk', default_encoding='utf-8')
-            except KeyError:
-                raise ValueError(
-                    f'Oops! Either "{query}" does not exist or is private.')
+            except:
+                break
 
             comma = ","
             dot = "."
