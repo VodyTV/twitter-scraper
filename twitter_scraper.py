@@ -5,12 +5,16 @@ from datetime import datetime
 session = HTMLSession()
 
 
-def get_tweets(query_raw, pages=25):
+def get_tweets(query_raw, pages=25, no_hashtag=False):
 
     """Gets tweets for a given user, via the Twitter frontend API."""
 
-    if type(query_raw)==list:
-        query = '%20%2B%20'.join(['%23'+''.join(e for e in word.lower() if e.isalnum()) for word in query_raw])
+    if no_hashtag and not type(query_raw)==list:
+        query = query_raw
+    elif type(query_raw)==list and no_hashtag:
+        query = '%20%2B%20'.join(query_raw)
+    elif type(query_raw)==list:
+        query = '%20%2B%20'.join([(e for e in word.lower() if e.isalnum()) for word in query_raw])
     else:
         query = '%23'+''.join(e for e in query_raw.lower() if e.isalnum())
 
@@ -49,7 +53,7 @@ def get_tweets(query_raw, pages=25):
                 hashtags = [hashtag_node.full_text for hashtag_node in tweet.find('.twitter-hashtag')]
                 urls = [url_node.attrs['data-expanded-url'] for url_node in tweet.find('a.twitter-timeline-link:not(.u-hidden)') if 'data-expanded-url' in url_node.attrs]
                 photos = [photo_node.attrs['data-image-url'] for photo_node in tweet.find('.AdaptiveMedia-photoContainer')]
-                
+
                 videos = []
                 video_nodes = tweet.find(".PlayableMedia-player")
                 for node in video_nodes:
@@ -75,10 +79,11 @@ def get_tweets(query_raw, pages=25):
                     yield tweet
 
             newrl = url + '&max_position=TWEET-'+last_tweet+'-'+first_tweet
-               
+
             r = session.get(
                 newrl, headers = headers)
-            
+
             pages += -1
 
     yield from gen_tweets(pages)
+
